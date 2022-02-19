@@ -614,7 +614,7 @@ var BaseProvider = /** @class */ (function (_super) {
                                 throw networkError;
                             }
                             var respTime = getTime();
-                            blockNumber = bignumber_1.BigNumber.from(blockNumber).toNumber();
+                            blockNumber = bignumber_1.BigNumber.from(blockNumber === null || blockNumber === void 0 ? void 0 : blockNumber.head.number).toNumber();
                             if (blockNumber < _this._maxInternalBlockNumber) {
                                 blockNumber = _this._maxInternalBlockNumber;
                             }

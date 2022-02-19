@@ -18915,7 +18915,7 @@ class BaseProvider extends Provider {
                     throw networkError;
                 }
                 const respTime = getTime();
-                blockNumber = BigNumber.from(blockNumber).toNumber();
+                blockNumber = BigNumber.from(blockNumber === null || blockNumber === void 0 ? void 0 : blockNumber.head.number).toNumber();
                 if (blockNumber < this._maxInternalBlockNumber) {
                     blockNumber = this._maxInternalBlockNumber;
                 }
@@ -20330,7 +20330,7 @@ class JsonRpcProvider extends BaseProvider {
     prepareRequest(method, params) {
         switch (method) {
             case "getBlockNumber":
-                return ["eth_blockNumber", []];
+                return ["chain.info", []];
             case "getGasPrice":
                 return ["eth_gasPrice", []];
             case "getBalance":

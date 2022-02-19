@@ -385,7 +385,7 @@ export class JsonRpcProvider extends BaseProvider {
     prepareRequest(method, params) {
         switch (method) {
             case "getBlockNumber":
-                return ["eth_blockNumber", []];
+                return ["chain.info", []];
             case "getGasPrice":
                 return ["eth_gasPrice", []];
             case "getBalance":

@@ -23889,7 +23889,7 @@
 	                                throw networkError;
 	                            }
 	                            var respTime = getTime();
-	                            blockNumber = lib$2.BigNumber.from(blockNumber).toNumber();
+	                            blockNumber = lib$2.BigNumber.from(blockNumber === null || blockNumber === void 0 ? void 0 : blockNumber.head.number).toNumber();
 	                            if (blockNumber < _this._maxInternalBlockNumber) {
 	                                blockNumber = _this._maxInternalBlockNumber;
 	                            }
@@ -25780,7 +25780,7 @@
 	    JsonRpcProvider.prototype.prepareRequest = function (method, params) {
 	        switch (method) {
 	            case "getBlockNumber":
-	                return ["eth_blockNumber", []];
+	                return ["chain.info", []];
 	            case "getGasPrice":
 	                return ["eth_gasPrice", []];
 	            case "getBalance":

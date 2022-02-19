@@ -503,7 +503,7 @@ var JsonRpcProvider = /** @class */ (function (_super) {
     JsonRpcProvider.prototype.prepareRequest = function (method, params) {
         switch (method) {
             case "getBlockNumber":
-                return ["eth_blockNumber", []];
+                return ["chain.info", []];
             case "getGasPrice":
                 return ["eth_gasPrice", []];
             case "getBalance":

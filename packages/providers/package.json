@@ -34,8 +34,7 @@
     "bech32": "1.1.4",
     "ws": "7.2.3"
   },
-  "description": "Ethereum Providers for ethers.",
-  "ethereum": "donations.ethers.eth",
+  "description": "Starcoin Providers for stc.",
   "funding": [
     {
       "type": "individual",
@@ -47,20 +46,20 @@
     }
   ],
   "keywords": [
-    "Ethereum",
-    "ethers"
+    "Starcoin",
+    "stc"
   ],
   "license": "MIT",
   "main": "./lib/index.js",
   "module": "./lib.esm/index.js",
-  "name": "@ethersproject/providers",
+  "name": "@starcoin/providers",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "directory": "packages/providers",
     "type": "git",
-    "url": "git://github.com/ethers-io/ethers.js.git"
+    "url": "git://github.com/starcoinorg/stc-ethers.git"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -68,5 +67,5 @@
   "sideEffects": false,
   "tarballHash": "0xaf42be8faf1e7fd1b0febcce1430b7c77379b02c85ce8dc53c525e9eda1b7273",
   "types": "./lib/index.d.ts",
-  "version": "5.2.0"
+  "version": "0.1.1"
 }

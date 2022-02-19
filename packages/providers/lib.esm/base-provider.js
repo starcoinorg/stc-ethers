@@ -492,7 +492,7 @@ export class BaseProvider extends Provider {
                     throw networkError;
                 }
                 const respTime = getTime();
-                blockNumber = BigNumber.from(blockNumber).toNumber();
+                blockNumber = BigNumber.from(blockNumber === null || blockNumber === void 0 ? void 0 : blockNumber.head.number).toNumber();
                 if (blockNumber < this._maxInternalBlockNumber) {
                     blockNumber = this._maxInternalBlockNumber;
                 }
