@@ -631,7 +631,7 @@ export class BaseProvider extends Provider implements EnsProvider {
 
             const respTime = getTime();
 
-            blockNumber = BigNumber.from(blockNumber).toNumber();
+            blockNumber = BigNumber.from(blockNumber?.head.number).toNumber();
             if (blockNumber < this._maxInternalBlockNumber) { blockNumber = this._maxInternalBlockNumber; }
 
             this._maxInternalBlockNumber = blockNumber;

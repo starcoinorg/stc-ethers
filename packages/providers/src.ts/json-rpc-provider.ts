@@ -443,7 +443,7 @@ export class JsonRpcProvider extends BaseProvider {
     prepareRequest(method: string, params: any): [string, Array<any>] {
         switch (method) {
             case "getBlockNumber":
-                return ["eth_blockNumber", []];
+                return ["chain.info", []];
 
             case "getGasPrice":
                 return ["eth_gasPrice", []];
