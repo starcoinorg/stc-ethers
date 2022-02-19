@@ -28,11 +28,11 @@ import { Formatter } from "./formatter";
 // Event Serializeing
 
 function checkTopic(topic: string): string {
-     if (topic == null) { return "null"; }
-     if (hexDataLength(topic) !== 32) {
-         logger.throwArgumentError("invalid topic", "topic", topic);
-     }
-     return topic.toLowerCase();
+    if (topic == null) { return "null"; }
+    if (hexDataLength(topic) !== 32) {
+        logger.throwArgumentError("invalid topic", "topic", topic);
+    }
+    return topic.toLowerCase();
 }
 
 function serializeTopics(topics: Array<string | Array<string>>): string {
@@ -44,7 +44,7 @@ function serializeTopics(topics: Array<string | Array<string>>): string {
         if (Array.isArray(topic)) {
 
             // Only track unique OR-topics
-            const unique: { [ topic: string ]: boolean } = { }
+            const unique: { [topic: string]: boolean } = {}
             topic.forEach((topic) => {
                 unique[checkTopic(topic)] = true;
             });
@@ -62,21 +62,21 @@ function serializeTopics(topics: Array<string | Array<string>>): string {
 }
 
 function deserializeTopics(data: string): Array<string | Array<string>> {
-    if (data === "") { return [ ]; }
+    if (data === "") { return []; }
 
     return data.split(/&/g).map((topic) => {
-        if (topic === "") { return [ ]; }
+        if (topic === "") { return []; }
 
         const comps = topic.split("|").map((topic) => {
-            return ((topic === "null") ? null: topic);
+            return ((topic === "null") ? null : topic);
         });
 
-        return ((comps.length === 1) ? comps[0]: comps);
+        return ((comps.length === 1) ? comps[0] : comps);
     });
 }
 
 function getEventTag(eventName: EventType): string {
-    if (typeof(eventName) === "string") {
+    if (typeof (eventName) === "string") {
         eventName = eventName.toLowerCase();
 
         if (hexDataLength(eventName) === 32) {
@@ -94,7 +94,7 @@ function getEventTag(eventName: EventType): string {
         logger.warn("not implemented");
         throw new Error("not implemented");
 
-    } else if (eventName && typeof(eventName) === "object") {
+    } else if (eventName && typeof (eventName) === "object") {
         return "filter:" + (eventName.address || "*") + ":" + serializeTopics(eventName.topics || []);
     }
 
@@ -131,7 +131,7 @@ function stall(duration: number): Promise<void> {
  *   - transaction hash
  */
 
-const PollableEvents = [ "block", "network", "pending", "poll" ];
+const PollableEvents = ["block", "network", "pending", "poll"];
 
 export class Event {
     readonly listener: Listener;
@@ -147,9 +147,9 @@ export class Event {
     get event(): EventType {
         switch (this.type) {
             case "tx":
-               return this.hash;
+                return this.hash;
             case "filter":
-               return this.filter;
+                return this.filter;
         }
         return this.tag;
     }
@@ -170,7 +170,7 @@ export class Event {
         const address = comps[1];
 
         const topics = deserializeTopics(comps[2]);
-        const filter: Filter = { };
+        const filter: Filter = {};
 
         if (topics.length > 0) { filter.topics = topics; }
         if (address && address !== "*") { filter.address = address; }
@@ -219,12 +219,12 @@ type CoinInfo = {
 };
 
 // https://github.com/satoshilabs/slips/blob/master/slip-0044.md
-const coinInfos: { [ coinType: string ]: CoinInfo } = {
-    "0":   { symbol: "btc",  p2pkh: 0x00, p2sh: 0x05, prefix: "bc" },
-    "2":   { symbol: "ltc",  p2pkh: 0x30, p2sh: 0x32, prefix: "ltc" },
-    "3":   { symbol: "doge", p2pkh: 0x1e, p2sh: 0x16 },
-    "60":  { symbol: "eth",  ilk: "eth" },
-    "61":  { symbol: "etc",  ilk: "eth" },
+const coinInfos: { [coinType: string]: CoinInfo } = {
+    "0": { symbol: "btc", p2pkh: 0x00, p2sh: 0x05, prefix: "bc" },
+    "2": { symbol: "ltc", p2pkh: 0x30, p2sh: 0x32, prefix: "ltc" },
+    "3": { symbol: "doge", p2pkh: 0x1e, p2sh: 0x16 },
+    "60": { symbol: "eth", ilk: "eth" },
+    "61": { symbol: "etc", ilk: "eth" },
     "700": { symbol: "xdai", ilk: "eth" },
 };
 
@@ -234,7 +234,7 @@ function bytes32ify(value: number): string {
 
 // Compute the Base58Check encoded data (checksum is first 4 bytes of sha256d)
 function base58Encode(data: Uint8Array): string {
-    return Base58.encode(concat([ data, hexDataSlice(sha256(sha256(data)), 0, 4) ]));
+    return Base58.encode(concat([data, hexDataSlice(sha256(sha256(data)), 0, 4)]));
 }
 
 export class Resolver implements EnsResolver {
@@ -254,7 +254,7 @@ export class Resolver implements EnsResolver {
         // keccak256("addr(bytes32,uint256)")
         const transaction = {
             to: this.address,
-            data: hexConcat([ selector, namehash(this.name), (parameters || "0x") ])
+            data: hexConcat([selector, namehash(this.name), (parameters || "0x")])
         };
 
         const result = await this.provider.call(transaction);
@@ -286,7 +286,7 @@ export class Resolver implements EnsResolver {
             if (p2pkh) {
                 const length = parseInt(p2pkh[1], 16);
                 if (p2pkh[2].length === length * 2 && length >= 1 && length <= 75) {
-                    return base58Encode(concat([ [ coinInfo.p2pkh ], ("0x" + p2pkh[2]) ]));
+                    return base58Encode(concat([[coinInfo.p2pkh], ("0x" + p2pkh[2])]));
                 }
             }
         }
@@ -297,7 +297,7 @@ export class Resolver implements EnsResolver {
             if (p2sh) {
                 const length = parseInt(p2sh[1], 16);
                 if (p2sh[2].length === length * 2 && length >= 1 && length <= 75) {
-                    return base58Encode(concat([ [ coinInfo.p2sh ], ("0x" + p2sh[2]) ]));
+                    return base58Encode(concat([[coinInfo.p2sh], ("0x" + p2sh[2])]));
                 }
             }
         }
@@ -403,11 +403,11 @@ export class Resolver implements EnsResolver {
 
         // The nodehash consumes the first slot, so the string pointer targets
         // offset 64, with the length at offset 64 and data starting at offset 96
-        keyBytes = concat([ bytes32ify(64), bytes32ify(keyBytes.length), keyBytes ]);
+        keyBytes = concat([bytes32ify(64), bytes32ify(keyBytes.length), keyBytes]);
 
         // Pad to word-size (32 bytes)
         if ((keyBytes.length % 32) !== 0) {
-            keyBytes = concat([ keyBytes, hexZeroPad("0x", 32 - (key.length % 32)) ])
+            keyBytes = concat([keyBytes, hexZeroPad("0x", 32 - (key.length % 32))])
         }
 
         const hexBytes = await this._fetchBytes("0x59d1d43c", hexlify(keyBytes));
@@ -439,7 +439,7 @@ export class BaseProvider extends Provider implements EnsProvider {
     //   - t:{hash}    - Transaction hash
     //   - b:{hash}    - BlockHash
     //   - block       - The most recent emitted block
-    _emitted: { [ eventName: string ]: number | "pending" };
+    _emitted: { [eventName: string]: number | "pending" };
 
     _pollingInterval: number;
     _poller: NodeJS.Timer;
@@ -531,7 +531,7 @@ export class BaseProvider extends Provider implements EnsProvider {
             // This should never happen; every Provider sub-class should have
             // suggested a network by here (or have thrown).
             if (!network) {
-                logger.throwError("no network detected", Logger.errors.UNKNOWN_ERROR, { });
+                logger.throwError("no network detected", Logger.errors.UNKNOWN_ERROR, {});
             }
 
             // Possible this call stacked so do not call defineReadOnly again
@@ -575,7 +575,7 @@ export class BaseProvider extends Provider implements EnsProvider {
 
     // @TODO: Remove this and just use getNetwork
     static getNetwork(network: Networkish): Network {
-        return getNetwork((network == null) ? "homestead": network);
+        return getNetwork((network == null) ? "homestead" : network);
     }
 
     // Fetches the blockNumber, but will reuse any result that is less
@@ -602,7 +602,7 @@ export class BaseProvider extends Provider implements EnsProvider {
                     // Too old; fetch a new value
                     break;
 
-                } catch(error) {
+                } catch (error) {
 
                     // The fetch rejected; if we are the first to get the
                     // rejection, drop through so we replace it with a new
@@ -618,7 +618,7 @@ export class BaseProvider extends Provider implements EnsProvider {
         const reqTime = getTime();
 
         const checkInternalBlockNumber = resolveProperties({
-            blockNumber: this.perform("getBlockNumber", { }),
+            blockNumber: this.perform("getBlockNumber", {}),
             networkError: this.getNetwork().then((network) => (null), (error) => (error))
         }).then(({ blockNumber, networkError }) => {
             if (networkError) {
@@ -841,7 +841,7 @@ export class BaseProvider extends Provider implements EnsProvider {
             this._setFastBlockNumber(blockNumber);
         }, (error) => { });
 
-        return (this._fastBlockNumber != null) ? this._fastBlockNumber: -1;
+        return (this._fastBlockNumber != null) ? this._fastBlockNumber : -1;
     }
 
     get polling(): boolean {
@@ -880,7 +880,7 @@ export class BaseProvider extends Provider implements EnsProvider {
     }
 
     set pollingInterval(value: number) {
-        if (typeof(value) !== "number" || value <= 0 || parseInt(String(value)) != value) {
+        if (typeof (value) !== "number" || value <= 0 || parseInt(String(value)) != value) {
             throw new Error("invalid polling interval");
         }
 
@@ -924,21 +924,21 @@ export class BaseProvider extends Provider implements EnsProvider {
     }
 
     async waitForTransaction(transactionHash: string, confirmations?: number, timeout?: number): Promise<TransactionReceipt> {
-        return this._waitForTransaction(transactionHash, (confirmations == null) ? 1: confirmations, timeout || 0, null);
+        return this._waitForTransaction(transactionHash, (confirmations == null) ? 1 : confirmations, timeout || 0, null);
     }
 
     async _waitForTransaction(transactionHash: string, confirmations: number, timeout: number, replaceable: { data: string, from: string, nonce: number, to: string, value: BigNumber, startBlock: number }): Promise<TransactionReceipt> {
         const receipt = await this.getTransactionReceipt(transactionHash);
 
         // Receipt is already good
-        if ((receipt ? receipt.confirmations: 0) >= confirmations) { return receipt; }
+        if ((receipt ? receipt.confirmations : 0) >= confirmations) { return receipt; }
 
         // Poll until the receipt is good...
         return new Promise((resolve, reject) => {
             const cancelFuncs: Array<() => void> = [];
 
             let done = false;
-            const alreadyDone = function() {
+            const alreadyDone = function () {
                 if (done) { return true; }
                 done = true;
                 cancelFuncs.forEach((func) => { func(); });
@@ -1012,7 +1012,7 @@ export class BaseProvider extends Provider implements EnsProvider {
                                         let reason = "replaced";
                                         if (tx.data === replaceable.data && tx.to === replaceable.to && tx.value.eq(replaceable.value)) {
                                             reason = "repriced";
-                                        } else  if (tx.data === "0x" && tx.from === tx.to && tx.value.isZero()) {
+                                        } else if (tx.data === "0x" && tx.from === tx.to && tx.value.isZero()) {
                                             reason = "cancelled"
                                         }
 
@@ -1049,7 +1049,7 @@ export class BaseProvider extends Provider implements EnsProvider {
                 });
             }
 
-            if (typeof(timeout) === "number" && timeout > 0) {
+            if (typeof (timeout) === "number" && timeout > 0) {
                 const timer = setTimeout(() => {
                     if (alreadyDone()) { return; }
                     reject(logger.makeError("timeout exceeded", Logger.errors.TIMEOUT, { timeout: timeout }));
@@ -1068,7 +1068,7 @@ export class BaseProvider extends Provider implements EnsProvider {
     async getGasPrice(): Promise<BigNumber> {
         await this.getNetwork();
 
-        const result = await this.perform("getGasPrice", { });
+        const result = await this.perform("getGasPrice", {});
         try {
             return BigNumber.from(result);
         } catch (error) {
@@ -1216,21 +1216,21 @@ export class BaseProvider extends Provider implements EnsProvider {
     async _getTransactionRequest(transaction: Deferrable<TransactionRequest>): Promise<Transaction> {
         const values: any = await transaction;
 
-        const tx: any = { };
+        const tx: any = {};
 
         ["from", "to"].forEach((key) => {
             if (values[key] == null) { return; }
-            tx[key] = Promise.resolve(values[key]).then((v) => (v ? this._getAddress(v): null))
+            tx[key] = Promise.resolve(values[key]).then((v) => (v ? this._getAddress(v) : null))
         });
 
         ["gasLimit", "gasPrice", "value"].forEach((key) => {
             if (values[key] == null) { return; }
-            tx[key] = Promise.resolve(values[key]).then((v) => (v ? BigNumber.from(v): null));
+            tx[key] = Promise.resolve(values[key]).then((v) => (v ? BigNumber.from(v) : null));
         });
 
         ["type"].forEach((key) => {
             if (values[key] == null) { return; }
-            tx[key] = Promise.resolve(values[key]).then((v) => ((v != null) ? v: null));
+            tx[key] = Promise.resolve(values[key]).then((v) => ((v != null) ? v : null));
         });
 
         if (values.accessList) {
@@ -1239,7 +1239,7 @@ export class BaseProvider extends Provider implements EnsProvider {
 
         ["data"].forEach((key) => {
             if (values[key] == null) { return; }
-            tx[key] = Promise.resolve(values[key]).then((v) => (v ? hexlify(v): null));
+            tx[key] = Promise.resolve(values[key]).then((v) => (v ? hexlify(v) : null));
         });
 
         return this.formatter.transactionRequest(await resolveProperties(tx));
@@ -1248,7 +1248,7 @@ export class BaseProvider extends Provider implements EnsProvider {
     async _getFilter(filter: Filter | FilterByBlockHash | Promise<Filter | FilterByBlockHash>): Promise<Filter | FilterByBlockHash> {
         filter = await filter;
 
-        const result: any = { };
+        const result: any = {};
 
         if (filter.address != null) {
             result.address = this._getAddress(filter.address);
@@ -1477,13 +1477,13 @@ export class BaseProvider extends Provider implements EnsProvider {
 
     async getEtherPrice(): Promise<number> {
         await this.getNetwork();
-        return this.perform("getEtherPrice", { });
+        return this.perform("getEtherPrice", {});
     }
 
     async _getBlockTag(blockTag: BlockTag | Promise<BlockTag>): Promise<BlockTag> {
         blockTag = await blockTag;
 
-        if (typeof(blockTag) === "number" && blockTag < 0) {
+        if (typeof (blockTag) === "number" && blockTag < 0) {
             if (blockTag % 1) {
                 logger.throwArgumentError("invalid BlockTag", "blockTag", blockTag);
             }
@@ -1537,7 +1537,7 @@ export class BaseProvider extends Provider implements EnsProvider {
             if (isHexString(name)) { throw error; }
         }
 
-        if (typeof(name) !== "string") {
+        if (typeof (name) !== "string") {
             logger.throwArgumentError("invalid ENS name", "name", name);
         }
 
@@ -1618,7 +1618,7 @@ export class BaseProvider extends Provider implements EnsProvider {
     emit(eventName: EventType, ...args: Array<any>): boolean {
         let result = false;
 
-        let stopped: Array<Event> = [ ];
+        let stopped: Array<Event> = [];
 
         let eventTag = getEventTag(eventName);
         this._events = this._events.filter((event) => {
@@ -1668,7 +1668,7 @@ export class BaseProvider extends Provider implements EnsProvider {
             return this.removeAllListeners(eventName);
         }
 
-        const stopped: Array<Event> = [ ];
+        const stopped: Array<Event> = [];
 
         let found = false;
 
@@ -1687,11 +1687,11 @@ export class BaseProvider extends Provider implements EnsProvider {
     }
 
     removeAllListeners(eventName?: EventType): this {
-        let stopped: Array<Event> = [ ];
+        let stopped: Array<Event> = [];
         if (eventName == null) {
             stopped = this._events;
 
-            this._events = [ ];
+            this._events = [];
         } else {
             const eventTag = getEventTag(eventName);
             this._events = this._events.filter((event) => {

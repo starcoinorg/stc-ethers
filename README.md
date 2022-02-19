@@ -1,5 +1,4 @@
-The Ethers Project
-==================
+# The Ethers Project
 
 [![npm (tag)](https://img.shields.io/npm/v/ethers)](https://www.npmjs.com/package/ethers)
 [![Node.js CI](https://github.com/ethers-io/ethers.js/workflows/Node.js%20CI/badge.svg?branch=ethers-v5-beta)](https://github.com/ethers-io/ethers.js/actions?query=workflow%3A%22Node.js+CI%22)
@@ -22,18 +21,14 @@ A complete Ethereum wallet implementation and utilities in JavaScript (and TypeS
 - Fully **TypeScript** ready, with definition files and full TypeScript source
 - **MIT License** (including ALL dependencies); completely open source to do with as you please
 
-
-Keep Updated
-------------
+## Keep Updated
 
 For the latest news and advisories, please follow the [@ethersproject](https://twitter.com/ethersproject)
 on Twitter (low-traffic, non-marketing, important information only) as well as watch this GitHub project.
 
 For the latest changes, see the [CHANGELOG](https://github.com/ethers-io/ethers.js/blob/master/CHANGELOG.md).
 
-
-Installing
-----------
+## Installing
 
 **node.js**
 
@@ -56,9 +51,7 @@ Installing
 </script>
 ```
 
-
-Documentation
--------------
+## Documentation
 
 Browse the [documentation](https://docs.ethers.io/v5/) online:
 
@@ -68,9 +61,7 @@ Browse the [documentation](https://docs.ethers.io/v5/) online:
 
 Or browse the entire documentation as a [single page](https://docs.ethers.io/v5/single-page/) to make searching easier.
 
-
-Ancillary Packages
-------------------
+## Ancillary Packages
 
 These are a number of packages not included in the umbrella `ethers` npm package, and
 additional packages are always being added. Often these packages are for specific
@@ -84,9 +75,6 @@ We will keep a list of useful packages here.
 - `@ethersproject/cli` ([documentation](https://docs.ethers.io/v5/cli/))
 - `@ethersproject/hardware-wallets` ([documentation](https://docs.ethers.io/v5/api/other/hardware/))
 
-
-License
--------
+## License
 
 MIT License (including **all** dependencies).
-

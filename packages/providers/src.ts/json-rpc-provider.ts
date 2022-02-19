@@ -20,7 +20,7 @@ const logger = new Logger(version);
 import { BaseProvider, Event } from "./base-provider";
 
 
-const errorGas = [ "call", "estimateGas" ];
+const errorGas = ["call", "estimateGas"];
 
 function checkError(method: string, error: any, params: any): any {
     // Undo the "convenience" some nodes are attempting to prevent backwards
@@ -33,11 +33,11 @@ function checkError(method: string, error: any, params: any): any {
     }
 
     let message = error.message;
-    if (error.code === Logger.errors.SERVER_ERROR && error.error && typeof(error.error.message) === "string") {
+    if (error.code === Logger.errors.SERVER_ERROR && error.error && typeof (error.error.message) === "string") {
         message = error.error.message;
-    } else if (typeof(error.body) === "string") {
+    } else if (typeof (error.body) === "string") {
         message = error.body;
-    } else if (typeof(error.responseText) === "string") {
+    } else if (typeof (error.responseText) === "string") {
         message = error.responseText;
     }
     message = (message || "").toLowerCase();
@@ -82,7 +82,7 @@ function checkError(method: string, error: any, params: any): any {
 }
 
 function timer(timeout: number): Promise<any> {
-    return new Promise(function(resolve) {
+    return new Promise(function (resolve) {
         setTimeout(resolve, timeout);
     });
 }
@@ -124,11 +124,11 @@ export class JsonRpcSigner extends Signer implements TypedDataSigner {
 
         if (addressOrIndex == null) { addressOrIndex = 0; }
 
-        if (typeof(addressOrIndex) === "string") {
+        if (typeof (addressOrIndex) === "string") {
             defineReadOnly(this, "_address", this.provider.formatter.address(addressOrIndex));
             defineReadOnly(this, "_index", null);
 
-        } else if (typeof(addressOrIndex) === "number") {
+        } else if (typeof (addressOrIndex) === "number") {
             defineReadOnly(this, "_index", addressOrIndex);
             defineReadOnly(this, "_address", null);
 
@@ -193,7 +193,7 @@ export class JsonRpcSigner extends Signer implements TypedDataSigner {
 
             const hexTx = (<any>this.provider.constructor).hexlifyTransaction(tx, { from: true });
 
-            return this.provider.send("eth_sendTransaction", [ hexTx ]).then((hash) => {
+            return this.provider.send("eth_sendTransaction", [hexTx]).then((hash) => {
                 return hash;
             }, (error) => {
                 return checkError("sendTransaction", error, hexTx);
@@ -222,11 +222,11 @@ export class JsonRpcSigner extends Signer implements TypedDataSigner {
     }
 
     async signMessage(message: Bytes | string): Promise<string> {
-        const data = ((typeof(message) === "string") ? toUtf8Bytes(message): message);
+        const data = ((typeof (message) === "string") ? toUtf8Bytes(message) : message);
         const address = await this.getAddress();
 
         // https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sign
-        return await this.provider.send("eth_sign", [ address.toLowerCase(), hexlify(data) ]);
+        return await this.provider.send("eth_sign", [address.toLowerCase(), hexlify(data)]);
     }
 
     async _signTypedData(domain: TypedDataDomain, types: Record<string, Array<TypedDataField>>, value: Record<string, any>): Promise<string> {
@@ -248,7 +248,7 @@ export class JsonRpcSigner extends Signer implements TypedDataSigner {
 
         const address = await this.getAddress();
 
-        return provider.send("personal_unlockAccount", [ address.toLowerCase(), password, null ]);
+        return provider.send("personal_unlockAccount", [address.toLowerCase(), password, null]);
     }
 }
 
@@ -271,8 +271,8 @@ class UncheckedJsonRpcSigner extends JsonRpcSigner {
     }
 }
 
-const allowedTransactionKeys: { [ key: string ]: boolean } = {
-    chainId: true, data: true, gasLimit: true, gasPrice:true, nonce: true, to: true, value: true,
+const allowedTransactionKeys: { [key: string]: boolean } = {
+    chainId: true, data: true, gasLimit: true, gasPrice: true, nonce: true, to: true, value: true,
     type: true, accessList: true
 }
 
@@ -288,7 +288,7 @@ export class JsonRpcProvider extends BaseProvider {
     _eventLoopCache: Record<string, Promise<any>>;
     get _cache(): Record<string, Promise<any>> {
         if (this._eventLoopCache == null) {
-            this._eventLoopCache = { };
+            this._eventLoopCache = {};
         }
         return this._eventLoopCache;
     }
@@ -316,8 +316,8 @@ export class JsonRpcProvider extends BaseProvider {
         // Default URL
         if (!url) { url = getStatic<() => string>(this.constructor, "defaultUrl")(); }
 
-        if (typeof(url) === "string") {
-            defineReadOnly(this, "connection",Object.freeze({
+        if (typeof (url) === "string") {
+            defineReadOnly(this, "connection", Object.freeze({
                 url: url
             }));
         } else {
@@ -348,10 +348,10 @@ export class JsonRpcProvider extends BaseProvider {
 
         let chainId = null;
         try {
-            chainId = await this.send("eth_chainId", [ ]);
+            chainId = await this.send("eth_chainId", []);
         } catch (error) {
             try {
-                chainId = await this.send("net_version", [ ]);
+                chainId = await this.send("net_version", []);
             } catch (error) { }
         }
 
@@ -403,7 +403,7 @@ export class JsonRpcProvider extends BaseProvider {
 
         // We can expand this in the future to any call, but for now these
         // are the biggest wins and do not require any serializing parameters.
-        const cache = ([ "eth_chainId", "eth_blockNumber" ].indexOf(method) >= 0);
+        const cache = (["eth_chainId", "eth_blockNumber"].indexOf(method) >= 0);
         if (cache && this._cache[method]) {
             return this._cache[method];
         }
@@ -440,58 +440,58 @@ export class JsonRpcProvider extends BaseProvider {
         return result;
     }
 
-    prepareRequest(method: string, params: any): [ string, Array<any> ] {
+    prepareRequest(method: string, params: any): [string, Array<any>] {
         switch (method) {
             case "getBlockNumber":
-                return [ "eth_blockNumber", [] ];
+                return ["eth_blockNumber", []];
 
             case "getGasPrice":
-                return [ "eth_gasPrice", [] ];
+                return ["eth_gasPrice", []];
 
             case "getBalance":
-                return [ "eth_getBalance", [ getLowerCase(params.address), params.blockTag ] ];
+                return ["eth_getBalance", [getLowerCase(params.address), params.blockTag]];
 
             case "getTransactionCount":
-                return [ "eth_getTransactionCount", [ getLowerCase(params.address), params.blockTag ] ];
+                return ["eth_getTransactionCount", [getLowerCase(params.address), params.blockTag]];
 
             case "getCode":
-                return [ "eth_getCode", [ getLowerCase(params.address), params.blockTag ] ];
+                return ["eth_getCode", [getLowerCase(params.address), params.blockTag]];
 
             case "getStorageAt":
-                return [ "eth_getStorageAt", [ getLowerCase(params.address), params.position, params.blockTag ] ];
+                return ["eth_getStorageAt", [getLowerCase(params.address), params.position, params.blockTag]];
 
             case "sendTransaction":
-                return [ "eth_sendRawTransaction", [ params.signedTransaction ] ]
+                return ["eth_sendRawTransaction", [params.signedTransaction]]
 
             case "getBlock":
                 if (params.blockTag) {
-                    return [ "eth_getBlockByNumber", [ params.blockTag, !!params.includeTransactions ] ];
+                    return ["eth_getBlockByNumber", [params.blockTag, !!params.includeTransactions]];
                 } else if (params.blockHash) {
-                    return [ "eth_getBlockByHash", [ params.blockHash, !!params.includeTransactions ] ];
+                    return ["eth_getBlockByHash", [params.blockHash, !!params.includeTransactions]];
                 }
                 return null;
 
             case "getTransaction":
-                return [ "eth_getTransactionByHash", [ params.transactionHash ] ];
+                return ["eth_getTransactionByHash", [params.transactionHash]];
 
             case "getTransactionReceipt":
-                return [ "eth_getTransactionReceipt", [ params.transactionHash ] ];
+                return ["eth_getTransactionReceipt", [params.transactionHash]];
 
             case "call": {
                 const hexlifyTransaction = getStatic<(t: TransactionRequest, a?: { [key: string]: boolean }) => { [key: string]: string }>(this.constructor, "hexlifyTransaction");
-                return [ "eth_call", [ hexlifyTransaction(params.transaction, { from: true }), params.blockTag ] ];
+                return ["eth_call", [hexlifyTransaction(params.transaction, { from: true }), params.blockTag]];
             }
 
             case "estimateGas": {
                 const hexlifyTransaction = getStatic<(t: TransactionRequest, a?: { [key: string]: boolean }) => { [key: string]: string }>(this.constructor, "hexlifyTransaction");
-                return [ "eth_estimateGas", [ hexlifyTransaction(params.transaction, { from: true }) ] ];
+                return ["eth_estimateGas", [hexlifyTransaction(params.transaction, { from: true })]];
             }
 
             case "getLogs":
                 if (params.filter && params.filter.address != null) {
                     params.filter.address = getLowerCase(params.filter.address);
                 }
-                return [ "eth_getLogs", [ params.filter ] ];
+                return ["eth_getLogs", [params.filter]];
 
             default:
                 break;
@@ -501,7 +501,7 @@ export class JsonRpcProvider extends BaseProvider {
     }
 
     async perform(method: string, params: any): Promise<any> {
-        const args = this.prepareRequest(method,  params);
+        const args = this.prepareRequest(method, params);
 
         if (args == null) {
             logger.throwError(method + " not implemented", Logger.errors.NOT_IMPLEMENTED, { operation: method });
@@ -525,32 +525,32 @@ export class JsonRpcProvider extends BaseProvider {
         const pendingFilter: Promise<number> = this.send("eth_newPendingTransactionFilter", []);
         this._pendingFilter = pendingFilter;
 
-        pendingFilter.then(function(filterId) {
+        pendingFilter.then(function (filterId) {
             function poll() {
-                self.send("eth_getFilterChanges", [ filterId ]).then(function(hashes: Array<string>) {
+                self.send("eth_getFilterChanges", [filterId]).then(function (hashes: Array<string>) {
                     if (self._pendingFilter != pendingFilter) { return null; }
 
                     let seq = Promise.resolve();
-                    hashes.forEach(function(hash) {
+                    hashes.forEach(function (hash) {
                         // @TODO: This should be garbage collected at some point... How? When?
                         self._emitted["t:" + hash.toLowerCase()] = "pending";
-                        seq = seq.then(function() {
-                            return self.getTransaction(hash).then(function(tx) {
+                        seq = seq.then(function () {
+                            return self.getTransaction(hash).then(function (tx) {
                                 self.emit("pending", tx);
                                 return null;
                             });
                         });
                     });
 
-                    return seq.then(function() {
+                    return seq.then(function () {
                         return timer(1000);
                     });
-                }).then(function() {
+                }).then(function () {
                     if (self._pendingFilter != pendingFilter) {
-                        self.send("eth_uninstallFilter", [ filterId ]);
+                        self.send("eth_uninstallFilter", [filterId]);
                         return;
                     }
-                    setTimeout(function() { poll(); }, 0);
+                    setTimeout(function () { poll(); }, 0);
 
                     return null;
                 }).catch((error: Error) => { });
@@ -592,14 +592,14 @@ export class JsonRpcProvider extends BaseProvider {
         const result: { [key: string]: string | AccessList } = {};
 
         // Some nodes (INFURA ropsten; INFURA mainnet is fine) do not like leading zeros.
-        ["gasLimit", "gasPrice", "type", "nonce", "value"].forEach(function(key) {
+        ["gasLimit", "gasPrice", "type", "nonce", "value"].forEach(function (key) {
             if ((<any>transaction)[key] == null) { return; }
             const value = hexValue((<any>transaction)[key]);
             if (key === "gasLimit") { key = "gas"; }
             result[key] = value;
         });
 
-        ["from", "to", "data"].forEach(function(key) {
+        ["from", "to", "data"].forEach(function (key) {
             if ((<any>transaction)[key] == null) { return; }
             result[key] = hexlify((<any>transaction)[key]);
         });

@@ -1,5 +1,4 @@
-Ethereum Providers
-==================
+# Ethereum Providers
 
 This sub-module is part of the [ethers project](https://github.com/ethers-io/ethers.js).
 
@@ -8,71 +7,65 @@ and re-exports many of the classes and types needed implement a custom Provider.
 
 For more information, see the [documentation](https://docs.ethers.io/v5/api/providers/).
 
-
-Importing
----------
+## Importing
 
 Most users will prefer to use the [umbrella package](https://www.npmjs.com/package/ethers),
 but for those with more specific needs, individual components can be imported.
 
 ```javascript
 const {
+  Provider,
+  BaseProvider,
 
-    Provider,
-    BaseProvider,
+  JsonRpcProvider,
+  StaticJsonRpcProvider,
+  UrlJsonRpcProvider,
 
-    JsonRpcProvider,
-    StaticJsonRpcProvider,
-    UrlJsonRpcProvider,
+  FallbackProvider,
 
-    FallbackProvider,
+  AlchemyProvider,
+  CloudflareProvider,
+  EtherscanProvider,
+  InfuraProvider,
+  NodesmithProvider,
 
-    AlchemyProvider,
-    CloudflareProvider,
-    EtherscanProvider,
-    InfuraProvider,
-    NodesmithProvider,
+  IpcProvider,
 
-    IpcProvider,
+  Web3Provider,
 
-    Web3Provider,
+  WebSocketProvider,
 
-    WebSocketProvider,
+  JsonRpcSigner,
 
-    JsonRpcSigner,
+  getDefaultProvider,
 
-    getDefaultProvider,
+  getNetwork,
 
-    getNetwork,
+  Formatter,
 
-    Formatter,
+  // Types
 
-    // Types
+  TransactionReceipt,
+  TransactionRequest,
+  TransactionResponse,
 
-    TransactionReceipt,
-    TransactionRequest,
-    TransactionResponse,
+  Listener,
 
-    Listener,
+  ExternalProvider,
 
-    ExternalProvider,
+  Block,
+  BlockTag,
+  EventType,
+  Filter,
+  Log,
 
-    Block,
-    BlockTag,
-    EventType,
-    Filter,
-    Log,
+  JsonRpcFetchFunc,
 
-    JsonRpcFetchFunc,
-
-    Network,
-    Networkish
-
+  Network,
+  Networkish,
 } = require("@ethersproject/providers");
 ```
 
-
-License
--------
+## License
 
 MIT License
